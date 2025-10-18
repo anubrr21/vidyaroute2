@@ -1,0 +1,3007 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scholarships - विद्याRoute</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2c3e50;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+            --text-light: #2c3e50;
+            --text-dark: #ecf0f1;
+            --bg-light: #ffffff;
+            --bg-dark: #121212;
+            --card-light: #ffffff;
+            --card-dark: #1e1e1e;
+            --border-light: #ddd;
+            --border-dark: #444;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: var(--bg-light);
+            --bg-secondary: var(--light);
+            --text-primary: var(--text-light);
+            --text-secondary: #4a5568;
+            --card-bg: var(--card-light);
+            --border-color: var(--border-light);
+            --input-bg: #ffffff;
+            --input-border: #d1d5db;
+            --input-text: #374151;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: var(--bg-dark);
+            --bg-secondary: #2d3748;
+            --text-primary: var(--text-dark);
+            --text-secondary: #a0aec0;
+            --card-bg: var(--card-dark);
+            --border-color: var(--border-dark);
+            --input-bg: #2d3748;
+            --input-border: #4a5568;
+            --input-text: #e2e8f0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .bg-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        }
+
+        .text-primary {
+            color: var(--primary);
+        }
+
+        .bg-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            color: var(--text-primary);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .hover-scale {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .hover-scale:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .glow {
+            text-shadow: 0 0 10px rgba(52, 152, 219, 0.5);
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .theme-toggle {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(15deg);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            color: white;
+        }
+
+        /* Enhanced Chatbot Button */
+        .chatbot {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #4A90E2, #50E3C2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s;
+            animation: pulse 2s infinite;
+        }
+
+        .chatbot:hover {
+            transform: scale(1.15);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+        }
+
+        .chatbot.has-unread::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 12px;
+            height: 12px;
+            background: #e74c3c;
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+
+        /* Enhanced Chat Window */
+        .chat-window {
+            position: fixed;
+            bottom: 100px;
+            right: 20px;
+            width: 420px;
+            height: 520px;
+            background: #1F1F1F;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            display: flex;
+            flex-direction: column;
+            z-index: 1000;
+            overflow: hidden;
+            transform: translateY(20px);
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.3s, opacity 0.3s;
+            color: #E0E0E0;
+        }
+
+        .chat-window.open {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        /* Chat Header */
+        .chat-header {
+            padding: 16px;
+            background: linear-gradient(135deg, #4A90E2, #50E3C2);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            font-size: 1rem;
+        }
+
+        .chat-status {
+            display: flex;
+            align-items: center;
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+
+        .status-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #2ecc71;
+            margin-right: 6px;
+        }
+
+        /* Chat Messages */
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        /* Chat Input */
+        .chat-input {
+            padding: 14px;
+            display: flex;
+            border-top: 1px solid #333;
+            background: #2B2B2B;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px 18px;
+            border: none;
+            border-radius: 25px;
+            background: #3A3A3A;
+            color: #E0E0E0;
+            outline: none;
+            font-size: 0.95rem;
+        }
+
+        .chat-input button {
+            margin-left: 12px;
+            background: linear-gradient(135deg, #4A90E2, #50E3C2);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .chat-input button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
+        }
+
+        .chat-input button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 14px 18px;
+            border-radius: 20px;
+            max-width: 75%;
+            line-height: 1.5;
+            font-size: 0.95rem;
+            position: relative;
+            animation: messageAppear 0.3s ease-out;
+        }
+
+        @keyframes messageAppear {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.bot {
+            background: #74c8dd;
+            color: white;
+            border-bottom-left-radius: 5px;
+            align-self: flex-start;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .message.user {
+            background: #3A3A3A;
+            color: #E0E0E0;
+            border-bottom-right-radius: 5px;
+            align-self: flex-end;
+            margin-left: auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+
+        .message-time {
+            font-size: 0.7rem;
+            opacity: 0.7;
+            margin-top: 5px;
+            text-align: right;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            padding: 10px 16px;
+            background: #3A3A3A;
+            border-radius: 20px;
+            align-self: flex-start;
+            margin-bottom: 10px;
+            max-width: 80px;
+        }
+
+        .typing-indicator span {
+            height: 8px;
+            width: 8px;
+            background: #E0E0E0;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 5px;
+            animation: typing 1.3s infinite;
+        }
+
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        .prompt-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .prompt-button {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 18px;
+            padding: 8px 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.85rem;
+            color: #E0E0E0;
+        }
+
+        .prompt-button:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .chat-actions {
+            display: flex;
+            padding: 10px 16px;
+            border-top: 1px solid #333;
+            background: #2B2B2B;
+            justify-content: space-between;
+        }
+
+        .chat-action-btn {
+            background: transparent;
+            border: none;
+            color: #E0E0E0;
+            cursor: pointer;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .chat-action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .quick-action {
+            background: rgba(116, 200, 221, 0.2);
+            border: 1px solid rgba(116, 200, 221, 0.3);
+            border-radius: 18px;
+            padding: 10px 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.85rem;
+            color: #E0E0E0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .quick-action:hover {
+            background: rgba(116, 200, 221, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .message-options {
+            display: flex;
+            gap: 5px;
+            margin-top: 8px;
+            justify-content: flex-end;
+        }
+
+        .message-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 0.7rem;
+            color: #E0E0E0;
+            transition: all 0.3s;
+        }
+
+        .message-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .college-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
+        }
+
+        .college-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .review-form {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: var(--primary);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            box-sizing: border-box;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: var(--card-bg);
+            border: 4px solid var(--primary);
+            border-radius: 50%;
+            top: 15px;
+            right: -13px;
+            z-index: 1;
+        }
+
+        .left {
+            left: 0;
+        }
+
+        .right {
+            left: 50%;
+        }
+
+        .left::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            right: 30px;
+            border: medium solid var(--primary);
+            border-width: 10px 0 10px 10px;
+            border-color: transparent transparent transparent var(--primary);
+        }
+
+        .right::before {
+            content: " ";
+            height: 0;
+            position: absolute;
+            top: 22px;
+            width: 0;
+            z-index: 1;
+            left: 30px;
+            border: medium solid var(--primary);
+            border-width: 10px 10px 10px 0;
+            border-color: transparent var(--primary) transparent transparent;
+        }
+
+        .right::after {
+            left: -13px;
+        }
+
+        .timeline-content {
+            padding: 20px;
+            background-color: var(--card-bg);
+            position: relative;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .course-path {
+            padding: 15px;
+            border-left: 3px solid var(--primary);
+            margin: 10px 0;
+            background: var(--bg-secondary);
+            border-radius: 0 8px 8px 0;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 0.8rem;
+            max-width: 500px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            color: var(--text-primary);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .loading-dots:after {
+            content: '';
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+        
+        .typewriter {
+            overflow: hidden;
+            border-right: .15em solid var(--primary);
+            white-space: nowrap;
+            margin: 0 auto;
+            letter-spacing: .05em;
+            animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: var(--primary); }
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .testimonial-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        
+        .testimonial-card::before {
+            content: "";
+            font-size: 5rem;
+            color: var(--primary);
+            opacity: 0.2;
+            position: absolute;
+            top: 10px;
+            left: 15px;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .btn-outline {
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            background: transparent;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .course-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
+        }
+        
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .course-card-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 20px;
+        }
+        
+        .course-card-body {
+            padding: 20px;
+        }
+        
+        .feature-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            background: var(--bg-secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 1.8rem;
+            color: var(--primary);
+        }
+        
+        footer a {
+            transition: color 0.3s;
+        }
+        
+        footer a:hover {
+            color: var(--accent) !important;
+        }
+        
+        .section-title {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 40px;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--primary);
+        }
+        
+        .section-title.center::after {
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .hero {
+            background: linear-gradient(rgba(28, 28, 28, 0.95), rgba(15, 15, 15, 0.95)),
+                        url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 100px 0;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.05);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .animate-slide-left {
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+
+        .animate-slide-right {
+            animation: slideInRight 0.8s ease-out forwards;
+        }
+
+        .animate-zoom-in {
+            animation: zoomIn 0.6s ease-out forwards;
+        }
+
+        .animate-bounce-in {
+            animation: bounceIn 0.8s ease-out forwards;
+        }
+        
+        .college-item {
+            transition: all 0.5s ease;
+        }
+
+        .college-item.hidden {
+            opacity: 0;
+            transform: scale(0.9);
+            height: 0;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .vocational-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .vocational-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .vocational-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .comparison-table th {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: var(--bg-secondary);
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+        
+        .college-details {
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        
+        .counseling-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .counseling-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .counseling-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .resource-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #74c8dd;
+        }
+
+        .assessment-suggestion {
+            background: linear-gradient(135deg, rgba(116, 200, 221, 0.2), rgba(78, 205, 196, 0.2));
+            border-radius: 12px;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid rgba(116, 200, 221, 0.3);
+        }
+        
+        .feature-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .feature-link:hover {
+            text-decoration: none;
+        }
+
+        /* Scholarship specific styles */
+        .scholarship-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .scholarship-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        .scholarship-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .scholarship-badge.merit {
+            background-color: rgba(46, 204, 113, 0.2);
+            color: #2ecc71;
+        }
+
+        .scholarship-badge.need {
+            background-color: rgba(52, 152, 219, 0.2);
+            color: #3498db;
+        }
+
+        .scholarship-badge.sports {
+            background-color: rgba(155, 89, 182, 0.2);
+            color: #9b59b6;
+        }
+
+        .scholarship-badge.minority {
+            background-color: rgba(241, 196, 15, 0.2);
+            color: #f1c40f;
+        }
+
+        .scholarship-badge.women {
+            background-color: rgba(231, 76, 60, 0.2);
+            color: #e74c3c;
+        }
+
+        .scholarship-badge.government {
+            background-color: rgba(52, 152, 219, 0.2);
+            color: #3498db;
+        }
+
+        .scholarship-badge.private {
+            background-color: rgba(155, 89, 182, 0.2);
+            color: #9b59b6;
+        }
+
+        .scholarship-amount {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .scholarship-deadline {
+            display: inline-block;
+            padding: 6px 12px;
+            background-color: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .filter-option {
+            padding: 8px 16px;
+            background-color: var(--bg-secondary);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .filter-option.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .scholarship-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .scholarship-stat {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .scholarship-stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .scholarship-stat-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .scholarship-detail-row {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .scholarship-detail-label {
+            font-weight: 600;
+            min-width: 150px;
+            color: var(--text-secondary);
+        }
+
+        .scholarship-detail-value {
+            flex: 1;
+        }
+
+        /* Form inputs for dark mode compatibility */
+        .form-select, .form-input {
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            color: var(--input-text);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            width: 100%;
+        }
+
+        .form-select:focus, .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+
+        /* Scholarship detail modal */
+        .scholarship-detail-modal {
+            max-width: 800px;
+            width: 90%;
+        }
+
+        .scholarship-website-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+
+        .scholarship-website-link:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Search bar styles */
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            padding-left: 45px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <!-- Header/Navigation -->
+    <header class="bg-header shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <a href="index.html" class="logo flex items-center">
+                    <img src="logo.jpeg" alt="VidyaRoute Logo" class="h-12 w-auto mr-3">
+                    <span class="text-white font-bold text-xl">विद्याRoute</span>
+                </a>
+                
+                <nav class="hidden md:flex space-x-8">
+                    <a href="index.html" class="text-white hover:text-accent font-medium">Home</a>
+                    <a href="assessment.html" class="text-white hover:text-accent font-medium">Assessment</a>
+                    <a href="colleges.html" class="text-white hover:text-accent font-medium">Colleges</a>
+                    <a href="scholarship.html" class="text-white hover:text-accent font-medium border-b-2 border-white">Scholarships</a>
+                    <a href="career-paths.html" class="text-white hover:text-accent font-medium">Career Paths</a>
+                    <a href="vocational.html" class="text-white hover:text-accent font-medium">Vocational</a>
+                    <a href="timeline.html" class="text-white hover:text-accent font-medium">Timeline</a>
+                    <a href="about.html" class="text-white hover:text-accent font-medium">About</a>
+                </nav>
+                
+                <div class="flex items-center space-x-4">
+                    <div class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <button id="loginBtn" class="bg-white text-primary px-4 py-2 rounded-lg hover:bg-accent hover:text-white transition">
+                        Login
+                    </button>
+                    <button id="mobileMenuBtn" class="md:hidden text-white">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu fixed inset-0 bg-primary z-40 p-6 md:hidden" style="display: none;">
+        <div class="flex justify-between items-center mb-8">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <span class="text-white">विद्याRoute</span>
+            </div>
+            <button id="closeMobileMenu" class="text-white">
+                <i class="fas fa-times text-xl"></i>
+            </button>
+        </div>
+        
+        <nav class="flex flex-col space-y-6">
+            <a href="index.html" class="text-white hover:text-accent font-medium text-lg">Home</a>
+            <a href="assessment.html" class="text-white hover:text-accent font-medium text-lg">Assessment</a>
+            <a href="colleges.html" class="text-white hover:text-accent font-medium text-lg">Colleges</a>
+            <a href="scholarship.html" class="text-white hover:text-accent font-medium text-lg">Scholarships</a>
+            <a href="career-paths.html" class="text-white hover:text-accent font-medium text-lg">Career Paths</a>
+            <a href="vocational.html" class="text-white hover:text-accent font-medium text-lg">Vocational</a>
+            <a href="timeline.html" class="text-white hover:text-accent font-medium text-lg">Timeline</a>
+            <a href="about.html" class="text-white hover:text-accent font-medium text-lg">About</a>
+            <button id="mobileLoginBtn" class="bg-white text-primary px-4 py-3 rounded-lg font-semibold text-left mt-4">
+                Login
+            </button>
+        </nav>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero py-20 overflow-hidden">
+        <div class="container mx-auto px-4 flex flex-col md:flex-row items-center relative z-10">
+            <div class="md:w-1/2 mb-10 md:mb-0 animate-slide-left">
+                <h1 class="text-4xl md:text-5xl font-bold mb-4 text-white">Find Your <span class="gradient-text">Scholarship</span> with विद्याRoute</h1>
+                <p class="text-xl mb-8 text-white">Discover financial aid opportunities for your education journey. We help you find scholarships that match your profile, academic achievements, and financial needs.</p>
+                <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                    <a href="#scholarship-list" class="btn-primary pulse text-center">
+                        Browse Scholarships
+                    </a>
+                    <a href="#scholarship-finder" class="btn-outline text-white border-white hover:bg-white hover:text-primary text-center">
+                        Find Matches
+                    </a>
+                </div>
+            </div>
+            <div class="md:w-1/2 flex justify-center animate-slide-right">
+                <div class="bg-card p-8 rounded-2xl shadow-xl max-w-md w-full hover-scale">
+                    <h3 class="text-primary text-xl font-bold mb-4">Scholarship Eligibility Check</h3>
+                    <p class="mb-4">Quickly find scholarships you're eligible for based on your academic profile, financial background, and other criteria.</p>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Current Education Level</label>
+                            <select class="form-select">
+                                <option>10th Grade</option>
+                                <option>11th Grade</option>
+                                <option>12th Grade</option>
+                                <option>Undergraduate</option>
+                                <option>Postgraduate</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-1">Annual Family Income</label>
+                            <select class="form-select">
+                                <option>Below ₹2.5 Lakhs</option>
+                                <option>₹2.5 - ₹5 Lakhs</option>
+                                <option>₹5 - ₹8 Lakhs</option>
+                                <option>Above ₹8 Lakhs</option>
+                            </select>
+                        </div>
+                    </div>
+                    <a href="#scholarship-finder" class="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-accent transition block text-center mt-4">
+                        Check Eligibility
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="py-12 bg-gray-100 dark:bg-gray-800">
+        <div class="container mx-auto px-4">
+            <div class="scholarship-stats">
+                <div class="scholarship-stat animate-fade-in-up" style="animation-delay: 0.1s">
+                    <div class="scholarship-stat-number">600+</div>
+                    <div class="scholarship-stat-label">Scholarships Listed</div>
+                </div>
+                <div class="scholarship-stat animate-fade-in-up" style="animation-delay: 0.2s">
+                    <div class="scholarship-stat-number">₹60Cr+</div>
+                    <div class="scholarship-stat-label">Total Scholarship Value</div>
+                </div>
+                <div class="scholarship-stat animate-fade-in-up" style="animation-delay: 0.3s">
+                    <div class="scholarship-stat-number">85%</div>
+                    <div class="scholarship-stat-label">Application Success Rate</div>
+                </div>
+                <div class="scholarship-stat animate-fade-in-up" style="animation-delay: 0.4s">
+                    <div class="scholarship-stat-number">35+</div>
+                    <div class="scholarship-stat-label">Partner Organizations</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scholarship Finder Section -->
+    <section id="scholarship-finder" class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Find <span class="gradient-text">Your Scholarships</span></h2>
+            <p class="text-xl text-center mb-12 max-w-3xl mx-auto">Use our advanced filters to discover scholarships that match your unique profile and educational goals</p>
+            
+            <div class="bg-card p-6 rounded-xl mb-8">
+                <h3 class="text-xl font-semibold mb-4">Refine Your Search</h3>
+                
+                <div class="search-container mb-6">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="searchInput" class="form-input search-input" placeholder="Search scholarships by name, category, or keyword...">
+                </div>
+                
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Education Level</label>
+                        <select class="form-select" id="educationLevel">
+                            <option value="">All Levels</option>
+                            <option>10th Grade</option>
+                            <option>11th Grade</option>
+                            <option>12th Grade</option>
+                            <option>Undergraduate</option>
+                            <option>Postgraduate</option>
+                            <option>PhD/Doctoral</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Field of Study</label>
+                        <select class="form-select" id="fieldOfStudy">
+                            <option value="">All Fields</option>
+                            <option>Engineering & Technology</option>
+                            <option>Medical & Health Sciences</option>
+                            <option>Commerce & Business</option>
+                            <option>Arts & Humanities</option>
+                            <option>Science & Research</option>
+                            <option>Law & Legal Studies</option>
+                            <option>Vocational & Skill-based</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Scholarship Type</label>
+                        <select class="form-select" id="scholarshipType">
+                            <option value="">All Types</option>
+                            <option>Merit-based</option>
+                            <option>Need-based</option>
+                            <option>Minority Scholarships</option>
+                            <option>Women-specific</option>
+                            <option>Sports Scholarships</option>
+                            <option>Disability Scholarships</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Annual Family Income</label>
+                        <select class="form-select" id="familyIncome">
+                            <option value="">Any Income</option>
+                            <option>Below ₹2.5 Lakhs</option>
+                            <option>₹2.5 - ₹5 Lakhs</option>
+                            <option>₹5 - ₹8 Lakhs</option>
+                            <option>Above ₹8 Lakhs</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between">
+                    <button class="text-primary font-semibold hover:underline" id="resetFilters">
+                        Reset Filters
+                    </button>
+                    <button class="bg-primary text-white px-6 py-3 rounded-lg font-semibold hover:bg-secondary transition" id="findScholarships">
+                        Find Scholarships
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scholarship List Section -->
+    <section id="scholarship-list" class="py-16 bg-secondary bg-opacity-10">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Available <span class="gradient-text">Scholarships</span></h2>
+            <p class="text-xl text-center mb-12 max-w-3xl mx-auto">Browse through our comprehensive database of scholarships from government, private organizations, and educational institutions</p>
+            
+            <div class="filter-options mb-8">
+                <div class="filter-option active" data-filter="all">All Scholarships</div>
+                <div class="filter-option" data-filter="merit">Merit-based</div>
+                <div class="filter-option" data-filter="need">Need-based</div>
+                <div class="filter-option" data-filter="sports">Sports</div>
+                <div class="filter-option" data-filter="minority">Minority</div>
+                <div class="filter-option" data-filter="women">Women</div>
+                <div class="filter-option" data-filter="government">Government</div>
+                <div class="filter-option" data-filter="private">Private</div>
+            </div>
+            
+            <div id="scholarship-container">
+                <!-- Scholarship cards will be dynamically loaded here -->
+                <!-- Initial scholarships will be loaded by JavaScript -->
+            </div>
+            
+            <div class="text-center mt-8">
+                <button class="btn-outline" id="loadMoreScholarships">Load More Scholarships</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Application Tips Section -->
+    <section class="py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Scholarship <span class="gradient-text">Application Tips</span></h2>
+            <p class="text-xl text-center mb-12 max-w-3xl mx-auto">Maximize your chances of securing scholarships with our expert guidance and application strategies</p>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Research Thoroughly</h3>
+                    <p>Identify scholarships that match your profile, academic achievements, and career goals. Don't overlook smaller scholarships.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Start Early</h3>
+                    <p>Begin your scholarship search at least a year before you need the funds. Many deadlines are early in the academic year.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Tailor Your Application</h3>
+                    <p>Customize each application to highlight how you meet the specific criteria of that scholarship.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Prepare Documents</h3>
+                    <p>Keep scanned copies of mark sheets, income certificates, identity proof, and other required documents ready.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-pen-fancy"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Write Strong Essays</h3>
+                    <p>Your essay should tell a compelling story about your goals, challenges, and why you deserve the scholarship.</p>
+                </div>
+                
+                <div class="feature-card fade-in">
+                    <div class="feature-icon">
+                        <i class="fas fa-check-double"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Proofread Everything</h3>
+                    <p>Review your application multiple times for errors. Ask a teacher or mentor to review it as well.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-16 bg-secondary bg-opacity-10">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 glow section-title center">Scholarship <span class="gradient-text">FAQs</span></h2>
+            <p class="text-xl text-center mb-12 max-w-3xl mx-auto">Find answers to common questions about scholarships and the application process</p>
+            
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-card p-6 rounded-xl mb-4">
+                    <h3 class="text-lg font-semibold mb-2">How early should I start applying for scholarships?</h3>
+                    <p class="text-gray-700 dark:text-gray-300">It's best to start your scholarship search at least 12-18 months before you need the funds. Many scholarships have early deadlines, and preparing strong applications takes time.</p>
+                </div>
+                
+                <div class="bg-card p-6 rounded-xl mb-4">
+                    <h3 class="text-lg font-semibold mb-2">Can I apply for multiple scholarships at once?</h3>
+                    <p class="text-gray-700 dark:text-gray-300">Yes, you can and should apply for multiple scholarships. There's no limit to how many scholarships you can apply for or receive, as long as you meet the eligibility criteria.</p>
+                </div>
+                
+                <div class="bg-card p-6 rounded-xl mb-4">
+                    <h3 class="text-lg font-semibold mb-2">What documents are typically required for scholarship applications?</h3>
+                    <p class="text-gray-700 dark:text-gray-300">Common requirements include academic transcripts, proof of income, identity proof, caste certificate (if applicable), recommendation letters, and a personal statement or essay.</p>
+                </div>
+                
+                <div class="bg-card p-6 rounded-xl mb-4">
+                    <h3 class="text-lg font-semibold mb-2">Do I need to repay scholarship money?</h3>
+                    <p class="text-gray-700 dark:text-gray-300">No, scholarships are financial awards that do not need to be repaid. They are different from education loans which must be repaid with interest.</p>
+                </div>
+                
+                <div class="bg-card p-6 rounded-xl">
+                    <h3 class="text-lg font-semibold mb-2">What happens if my family income changes after I receive a scholarship?</h3>
+                    <p class="text-gray-700 dark:text-gray-300">You should inform the scholarship provider about any significant changes in your financial situation. Some scholarships may adjust the award amount based on updated information.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-primary py-12 text-white">
+        <div class="container mx-auto px-4">
+            <div class="footer-grid">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <img src="logo.jpeg" alt="VidyaRoute Logo" class="h-10 w-auto mr-2">
+                        <span class="text-xl font-bold">विद्याRoute</span>
+                    </div>
+                    <p class="mb-4">Empowering students to make informed decisions about their academic and career journey.</p>
+                    <p class="text-sm">"Your Pathway to Success"</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="hover:text-accent">Home</a></li>
+                        <li><a href="assessment.html" class="hover:text-accent">Assessment</a></li>
+                        <li><a href="colleges.html" class="hover:text-accent">Colleges</a></li>
+                        <li><a href="career-paths.html" class="hover:text-accent">Career Paths</a></li>
+                        <li><a href="scholarship.html" class="hover:text-accent">Scholarships</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" id="privacyLink" class="hover:text-accent">Privacy Policy</a></li>
+                        <li><a href="#" id="termsLink" class="hover:text-accent">Terms of Service</a></li>
+                        <li><a href="about.html" class="hover:text-accent">About Us</a></li>
+                        <li><a href="about.html#faq" class="hover:text-accent">FAQ</a></li>
+                        <li><a href="about.html#contact" class="hover:text-accent">Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Connect With Us</h3>
+                    <div class="flex space-x-4 mb-4">
+                        <a href="https://github.com/anubrr21" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://linkedin.com/in/anubrata-bhattacharyya" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="https://wa.me/918977039397" target="_blank" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="mailto:info@vidyaroute.com" class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary hover:bg-accent hover:text-white">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                    <p class="text-sm">© 2025 विद्याRoute. All rights reserved.</p>
+                    <p class="text-sm mt-2">Made with ❤️ by PseudoCoderz</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Enhanced Professional Chatbot -->
+    <div class="chatbot" id="chatbotButton">
+        <i class="fas fa-comments"></i>
+    </div>
+
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <div>
+                <h3>विद्याRoute Career Counselor</h3>
+                <div class="chat-status">
+                    <span class="status-indicator"></span>
+                    <span>Dr. Ashtami Shree, Career Expert</span>
+                </div>
+            </div>
+            <div>
+                <button id="minimizeChat" class="text-white mr-2"><i class="fas fa-minus"></i></button>
+                <button id="closeChat"><i class="fas fa-times"></i></button>
+            </div>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot">
+                <div>Namaste! I'm Dr. Ashtami Shree, your personal career counselor at विद्याRoute. I'm here to help you navigate your educational and career journey with personalized guidance.</div>
+                <div class="message-time">Just now</div>
+            </div>
+            <div class="message bot">
+                <div>How can I assist you today? I can help with:</div>
+                <div class="counseling-options">
+                    <div class="counseling-option" data-option="stream_selection">
+                        <i class="fas fa-graduation-cap"></i>
+                        <div>Stream Selection</div>
+                    </div>
+                    <div class="counseling-option" data-option="career_planning">
+                        <i class="fas fa-road"></i>
+                        <div>Career Planning</div>
+                    </div>
+                    <div class="counseling-option" data-option="college_guidance">
+                        <i class="fas fa-university"></i>
+                        <div>College Guidance</div>
+                    </div>
+                    <div class="counseling-option" data-option="exam_preparation">
+                        <i class="fas fa-book"></i>
+                        <div>Exam Preparation</div>
+                    </div>
+                    <div class="counseling-option" data-option="skill_development">
+                        <i class="fas fa-tools"></i>
+                        <div>Skill Development</div>
+                    </div>
+                    <div class="counseling-option" data-option="stress_management">
+                        <i class="fas fa-heart"></i>
+                        <div>Stress Management</div>
+                    </div>
+                </div>
+                <div class="message-time">Just now</div>
+            </div>
+        </div>
+        <div class="chat-actions">
+            <button class="chat-action-btn" id="clearChat">
+                <i class="fas fa-trash"></i>
+                <span>Clear Chat</span>
+            </button>
+            <button class="chat-action-btn" id="suggestAssessment">
+                <i class="fas fa-clipboard-check"></i>
+                <span>Take Assessment</span>
+            </button>
+            <button class="chat-action-btn" id="scheduleSession">
+                <i class="fas fa-calendar-plus"></i>
+                <span>Book Session</span>
+            </button>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="Describe your career concerns or ask a question...">
+            <button id="sendMessage"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="privacyModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-primary">Privacy Policy</h3>
+                <button class="close-modal text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="overflow-y-auto max-h-96">
+                <p class="mb-4">Last updated: September 15, 2025</p>
+                
+                <h4 class="font-semibold mt-4 mb-2">1. Information We Collect</h4>
+                <p class="mb-4">We collect information you provide directly to us, including when you create an account, complete assessments, or contact us for support. This may include personal information such as your name, email address, educational background, and career interests.</p>
+                
+                <h4 class="font-semibold mt-4 mb-2">2. How We Use Your Information</h4>
+                <p class="mb-4">We use the information we collect to provide, maintain, and improve our services, develop new features, provide personalized career recommendations, and communicate with you about updates and offers.</p>
+                
+                <h4 class="font-semibold mt-4 mb-2">3. Information Sharing</h4>
+                <p class="mb-4">We do not sell your personal information to third parties. We may share information with service providers who assist us in operating our platform, and when required by law or to protect our rights.</p>
+                
+                <h4 class="font-semibold mt-4 mb-2">4. Data Security</h4>
+                <p class="mb-4">We implement appropriate security measures to protect your personal information against unauthorized access, alteration, disclosure, or destruction.</p>
+                
+                <h4 class="font-semibold mt-4 mb-2">5. Your Choices</h4>
+                <p class="mb-4">You can update your account information and communication preferences at any time through your account settings. You may also request deletion of your account by contacting us.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="termsModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-primary">Terms of Service</h3>
+                <button class="close-modal text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="overflow-y-auto max-h-96">
+                <p class="mb-4">Last updated: September 15, 2025</p>
+                
+                <h4 class="font-semibold mt-4 mb-2">1. Acceptance of Terms</h4>
+                <p class="mb-4">By accessing or using विद्याRoute, you agree to be bound by these Terms of Service and our Privacy Policy. If you do not agree to these terms, please do not use our services.</p>
+                
+                <h4 class="font-semibold mt-4 mb-2">2. Services Description</h4>
+                <p class="mb-4">विद्याRoute provides career guidance services including aptitude assessments, college information, career path mapping, and educational resources. Our services are intended for informational purposes only and should not be considered as professional advice.</p>
+                
+                <h4 class="font-semibold mt-4 mb-2">3. User Accounts</h4>
+                <p class="mb-4">You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. You must be at least 13 years old to use our services.</p>
+                
+                <h4 class="font-semibold mt-4 mb-2">4. Intellectual Property</h4>
+                <p class="mb-4">All content on विद्याRoute, including text, graphics, logos, and software, is the property of विद्याRoute or its content suppliers and is protected by intellectual property laws.</p>
+                
+                <h4 class="font-semibold mt-4 mb-2">5. Limitation of Liability</h4>
+                <p class="mb-4">विद्याRoute shall not be liable for any indirect, incidental, special, or consequential damages resulting from the use or inability to use our services.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scholarship Detail Modal -->
+    <div id="scholarshipDetailModal" class="modal">
+        <div class="modal-content scholarship-detail-modal">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-semibold text-primary" id="detailModalTitle">Scholarship Details</h3>
+                <button class="close-modal text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="overflow-y-auto max-h-96" id="scholarshipDetailContent">
+                <!-- Scholarship details will be populated here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Scholarship data - 18 scholarships total (added 5 more)
+        const scholarshipData = [
+            {
+                id: 1,
+                title: "National Talent Search Examination (NTSE)",
+                categories: ["merit", "government"],
+                description: "A national-level scholarship program in India to identify and recognize students with high intellect and academic talent.",
+                eligibility: "Students of Class X",
+                benefits: "₹1250 per month for Class XI-XII, ₹2000 per month for Undergraduates and Postgraduates",
+                applicationPeriod: "August - October",
+                amount: "Up to ₹48,000/year",
+                deadline: "Oct 15, 2025",
+                website: "https://ncert.nic.in/national-talent-examination.php",
+                provider: "National Council of Educational Research and Training (NCERT)",
+                documents: "Academic transcripts, Income certificate, Identity proof"
+            },
+            {
+                id: 2,
+                title: "Pre-Matric Scholarship Scheme for Minorities",
+                categories: ["need", "minority", "government"],
+                description: "Scholarship for students belonging to minority communities studying in classes I to X.",
+                eligibility: "Students from minority communities (Muslim, Christian, Sikh, Buddhist, Jain, Parsi) with family income less than ₹1 lakh",
+                benefits: "Admission & tuition fee ₹500/- per annum, Maintenance allowance ₹100/- per month for hostellers and ₹75/- per month for day scholars",
+                applicationPeriod: "July - September",
+                amount: "Up to ₹10,000/year",
+                deadline: "Sep 30, 2025",
+                website: "https://scholarships.gov.in/",
+                provider: "Ministry of Minority Affairs",
+                documents: "Caste certificate, Income certificate, Academic transcripts"
+            },
+            {
+                id: 3,
+                title: "Aditya Birla Scholarship",
+                categories: ["merit", "women", "private"],
+                description: "Scholarship for meritorious girl students pursuing professional courses like Engineering, Medicine, Law, etc.",
+                eligibility: "Girl students with excellent academic record, family income less than ₹6 lakhs per annum",
+                benefits: "₹1,80,000 per annum for the entire duration of the course",
+                applicationPeriod: "January - March",
+                amount: "₹1,80,000/year",
+                deadline: "Mar 31, 2025",
+                website: "https://www.adityabirla.com/scholarship",
+                provider: "Aditya Birla Group",
+                documents: "Academic transcripts, Income certificate, Identity proof, Recommendation letters"
+            },
+            {
+                id: 4,
+                title: "Sports Scholarship Scheme",
+                categories: ["sports", "government"],
+                description: "Scholarship for outstanding sports persons studying in schools, colleges, and universities.",
+                eligibility: "Students who have represented state/national level in sports",
+                benefits: "Tuition fee, hostel charges, special diet allowance, and sports kit allowance",
+                applicationPeriod: "April - June",
+                amount: "Up to ₹60,000/year",
+                deadline: "Jun 15, 2025",
+                website: "https://yas.nic.in/sports/scholarship",
+                provider: "Ministry of Youth Affairs and Sports",
+                documents: "Sports achievement certificates, Academic transcripts, Recommendation from sports authority"
+            },
+            {
+                id: 5,
+                title: "Kishore Vaigyanik Protsahan Yojana (KVPY)",
+                categories: ["merit", "private"],
+                description: "A scholarship program funded by the Department of Science and Technology to encourage students to take up research careers in Science.",
+                eligibility: "Students of Class XI, XII, and 1st year of undergraduate program in Basic Sciences",
+                benefits: "Monthly fellowship of ₹5000 to ₹7000 and annual contingency grant",
+                applicationPeriod: "July - September",
+                amount: "₹60,000 - ₹84,000/year",
+                deadline: "Sep 30, 2025",
+                website: "https://kvpy.iisc.ernet.in/",
+                provider: "Indian Institute of Science (IISc)",
+                documents: "Academic transcripts, KVPY exam score, Identity proof"
+            },
+            {
+                id: 6,
+                title: "Post Matric Scholarship for SC/ST Students",
+                categories: ["need", "government"],
+                description: "Scholarship for students belonging to Scheduled Castes and Scheduled Tribes pursuing post-matriculation or post-secondary education.",
+                eligibility: "SC/ST students with family income less than ₹2.5 lakhs per annum",
+                benefits: "Full tuition fee, maintenance allowance, and other academic expenses",
+                applicationPeriod: "July - October",
+                amount: "Up to ₹1,20,000/year",
+                deadline: "Oct 31, 2025",
+                website: "https://scholarships.gov.in/",
+                provider: "Ministry of Social Justice and Empowerment",
+                documents: "Caste certificate, Income certificate, Academic transcripts"
+            },
+            {
+                id: 7,
+                title: "AICTE Saksham Scholarship",
+                categories: ["merit", "need", "government"],
+                description: "Scholarship for differently-abled students pursuing technical education in AICTE approved institutions.",
+                eligibility: "Students with disabilities (more than 40%) pursuing diploma/degree in technical education",
+                benefits: "Tuition fee reimbursement and additional allowance for books, equipment, etc.",
+                applicationPeriod: "November - December",
+                amount: "₹50,000/year",
+                deadline: "Dec 15, 2025",
+                website: "https://www.aicte-india.org/scholarships",
+                provider: "All India Council for Technical Education (AICTE)",
+                documents: "Disability certificate, Academic transcripts, Income certificate"
+            },
+            {
+                id: 8,
+                title: "Nurturing Brilliance - Cummins Scholarship",
+                categories: ["merit", "private"],
+                description: "Scholarship for meritorious students from economically weaker sections pursuing engineering education.",
+                eligibility: "Engineering students with family income less than ₹8 lakhs per annum and excellent academic record",
+                benefits: "Full tuition fee and additional allowance for academic expenses",
+                applicationPeriod: "June - August",
+                amount: "₹2,00,000/year",
+                deadline: "Aug 31, 2025",
+                website: "https://www.cummins.com/scholarships",
+                provider: "Cummins India",
+                documents: "Academic transcripts, Income certificate, Engineering admission proof"
+            },
+            {
+                id: 9,
+                title: "Central Sector Scheme of Scholarships for College and University Students",
+                categories: ["merit", "government"],
+                description: "Scholarship for meritorious students from low-income families pursuing higher education.",
+                eligibility: "Students who have scored above 80% in Class XII and family income less than ₹6 lakhs per annum",
+                benefits: "₹10,000 per annum for first three years and ₹20,000 per annum for remaining course duration",
+                applicationPeriod: "August - October",
+                amount: "₹10,000 - ₹20,000/year",
+                deadline: "Oct 31, 2025",
+                website: "https://scholarships.gov.in/",
+                provider: "Ministry of Education",
+                documents: "Class XII marksheet, Income certificate, Admission proof"
+            },
+            {
+                id: 10,
+                title: "L'Oreal India For Young Women in Science Scholarship",
+                categories: ["merit", "women", "private"],
+                description: "Scholarship for young women pursuing education in Science at the undergraduate level.",
+                eligibility: "Girl students from Class XII to undergraduate level in Science stream with excellent academic record",
+                benefits: "₹2,50,000 for the entire course duration",
+                applicationPeriod: "April - June",
+                amount: "₹2,50,000 total",
+                deadline: "Jun 30, 2025",
+                website: "https://www.loreal.com/en/india/",
+                provider: "L'Oreal India",
+                documents: "Academic transcripts, Personal statement, Recommendation letters"
+            },
+            {
+                id: 11,
+                title: "Prime Minister's Scholarship Scheme for Central Armed Police Forces & Assam Rifles",
+                categories: ["merit", "government"],
+                description: "Scholarship for wards of personnel of Central Armed Police Forces and Assam Rifles.",
+                eligibility: "Wards of CAPF & AR personnel pursuing professional courses",
+                benefits: "₹2,250 per month for girls and ₹2,000 per month for boys",
+                applicationPeriod: "August - October",
+                amount: "₹24,000 - ₹27,000/year",
+                deadline: "Oct 15, 2025",
+                website: "https://scholarships.gov.in/",
+                provider: "Ministry of Home Affairs",
+                documents: "Parent's service certificate, Academic transcripts, Admission proof"
+            },
+            {
+                id: 12,
+                title: "HDFC Educational Crisis Scholarship",
+                categories: ["need", "private"],
+                description: "Scholarship support for students facing financial crisis due to medical emergencies or loss of earning parent.",
+                eligibility: "Students whose families have faced financial crisis due to medical emergencies or loss of earning parent",
+                benefits: "Tuition fee and other academic expenses up to ₹3 lakhs",
+                applicationPeriod: "Throughout the year",
+                amount: "Up to ₹3,00,000 total",
+                deadline: "Rolling",
+                website: "https://www.hdfcbank.com/personal/save/social-responsibility/educational-crisis-scholarship",
+                provider: "HDFC Bank",
+                documents: "Medical/emergency proof, Income certificate, Academic transcripts"
+            },
+            {
+                id: 13,
+                title: "Swami Vivekananda Merit Cum Means Scholarship",
+                categories: ["merit", "need", "minority", "government"],
+                description: "Scholarship for meritorious minority students from West Bengal pursuing professional and technical courses.",
+                eligibility: "Minority students from West Bengal with family income less than ₹2.5 lakhs per annum",
+                benefits: "Full tuition fee and maintenance allowance",
+                applicationPeriod: "July - September",
+                amount: "Up to ₹50,000/year",
+                deadline: "Sep 30, 2025",
+                website: "https://svmcm.wbhed.gov.in/",
+                provider: "West Bengal Minority Development & Finance Corporation",
+                documents: "Minority certificate, Domicile certificate, Income certificate, Academic transcripts"
+            },
+            {
+                id: 14,
+                title: "Indian Oil Academic Scholarship",
+                categories: ["merit", "private"],
+                description: "Scholarship for meritorious students pursuing full-time courses in Engineering, MBBS, and MBA.",
+                eligibility: "Students with minimum 65% marks in Class XII and family income less than ₹1 lakh per annum",
+                benefits: "₹3,000 per month for the entire duration of the course",
+                applicationPeriod: "September - November",
+                amount: "₹36,000/year",
+                deadline: "Nov 30, 2025",
+                website: "https://iocl.com/scholarship",
+                provider: "Indian Oil Corporation",
+                documents: "Academic transcripts, Income certificate, Admission proof"
+            },
+            {
+                id: 15,
+                title: "ONGC Scholarship for SC/ST Students",
+                categories: ["merit", "government"],
+                description: "Scholarship for SC/ST students pursuing professional courses in Engineering and MBBS.",
+                eligibility: "SC/ST students with minimum 60% marks in Class XII pursuing Engineering or MBBS",
+                benefits: "₹48,000 per annum for the entire course duration",
+                applicationPeriod: "August - October",
+                amount: "₹48,000/year",
+                deadline: "Oct 31, 2025",
+                website: "https://ongcindia.com/scholarship",
+                provider: "Oil and Natural Gas Corporation",
+                documents: "Caste certificate, Academic transcripts, Admission proof"
+            },
+            {
+                id: 16,
+                title: "JN Tata Endowment Scholarship",
+                categories: ["merit", "private"],
+                description: "Scholarship for Indian students pursuing higher studies abroad.",
+                eligibility: "Indian nationals with excellent academic record planning to pursue higher studies abroad",
+                benefits: "Loan scholarship ranging from ₹1.5 lakhs to ₹10 lakhs",
+                applicationPeriod: "January - March",
+                amount: "Up to ₹10,00,000",
+                deadline: "Mar 15, 2025",
+                website: "https://www.dorabjitatatrust.org/",
+                provider: "JN Tata Endowment",
+                documents: "Academic transcripts, Admission letter from foreign university, Statement of purpose"
+            },
+            {
+                id: 17,
+                title: "Sitaram Jindal Foundation Scholarship",
+                categories: ["merit", "need", "private"],
+                description: "Scholarship for students from economically weaker sections pursuing various courses.",
+                eligibility: "Students with family income less than ₹4 lakhs per annum pursuing various courses",
+                benefits: "₹1,000 to ₹5,000 per month depending on the course",
+                applicationPeriod: "June - August",
+                amount: "₹12,000 - ₹60,000/year",
+                deadline: "Aug 31, 2025",
+                website: "https://www.sitaramjindalfoundation.org/",
+                provider: "Sitaram Jindal Foundation",
+                documents: "Income certificate, Academic transcripts, Admission proof"
+            },
+            {
+                id: 18,
+                title: "LIC Golden Jubilee Scholarship",
+                categories: ["merit", "need", "private"],
+                description: "Scholarship for students from economically weaker sections pursuing professional courses.",
+                eligibility: "Students with family income less than ₹2 lakhs per annum pursuing professional courses",
+                benefits: "₹20,000 per annum for the entire course duration",
+                applicationPeriod: "July - September",
+                amount: "₹20,000/year",
+                deadline: "Sep 30, 2025",
+                website: "https://www.licindia.in/scholarship",
+                provider: "Life Insurance Corporation of India",
+                documents: "Income certificate, Academic transcripts, Admission proof"
+            }
+        ];
+
+        // Scholarship filtering and display functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterOptions = document.querySelectorAll('.filter-option');
+            const scholarshipContainer = document.getElementById('scholarship-container');
+            const loadMoreButton = document.getElementById('loadMoreScholarships');
+            const resetFiltersButton = document.getElementById('resetFilters');
+            const findScholarshipsButton = document.getElementById('findScholarships');
+            const searchInput = document.getElementById('searchInput');
+            
+            let currentFilter = 'all';
+            let displayedCount = 5; // Initial number of scholarships to display
+            const loadIncrement = 5; // Number of additional scholarships to load each time
+            
+            // Initial render
+            renderScholarships();
+            
+            // Filter option click handlers
+            filterOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Remove active class from all options
+                    filterOptions.forEach(opt => opt.classList.remove('active'));
+                    
+                    // Add active class to clicked option
+                    this.classList.add('active');
+                    
+                    currentFilter = this.getAttribute('data-filter');
+                    displayedCount = 5; // Reset to initial count when filter changes
+                    renderScholarships();
+                });
+            });
+            
+            // Load more scholarships
+            loadMoreButton.addEventListener('click', function() {
+                displayedCount += loadIncrement;
+                renderScholarships();
+                
+                // Hide button if all scholarships are displayed
+                const filteredScholarships = getFilteredScholarships();
+                if (displayedCount >= filteredScholarships.length) {
+                    loadMoreButton.style.display = 'none';
+                }
+            });
+            
+            // Reset filters
+            resetFiltersButton.addEventListener('click', function() {
+                // Reset all select elements
+                document.querySelectorAll('.form-select').forEach(select => {
+                    select.selectedIndex = 0;
+                });
+                
+                // Reset search input
+                searchInput.value = '';
+                
+                // Reset filter options
+                filterOptions.forEach(opt => opt.classList.remove('active'));
+                document.querySelector('.filter-option[data-filter="all"]').classList.add('active');
+                
+                currentFilter = 'all';
+                displayedCount = 5;
+                renderScholarships();
+                loadMoreButton.style.display = 'block';
+            });
+            
+            // Find scholarships based on form criteria
+            findScholarshipsButton.addEventListener('click', function() {
+                displayedCount = 5;
+                renderScholarships();
+            });
+            
+            // Search functionality
+            searchInput.addEventListener('input', function() {
+                displayedCount = 5;
+                renderScholarships();
+            });
+            
+            // Fade in animation for elements
+            const fadeElements = document.querySelectorAll('.fade-in');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            fadeElements.forEach(el => observer.observe(el));
+            
+            // Function to get filtered scholarships based on current filter and search
+            function getFilteredScholarships() {
+                let filtered = scholarshipData;
+                
+                // Apply category filter
+                if (currentFilter !== 'all') {
+                    filtered = filtered.filter(scholarship => 
+                        scholarship.categories.includes(currentFilter)
+                    );
+                }
+                
+                // Apply search filter
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                if (searchTerm) {
+                    filtered = filtered.filter(scholarship => 
+                        scholarship.title.toLowerCase().includes(searchTerm) ||
+                        scholarship.description.toLowerCase().includes(searchTerm) ||
+                        scholarship.categories.some(cat => 
+                            getCategoryDisplayName(cat).toLowerCase().includes(searchTerm)
+                        )
+                    );
+                }
+                
+                // Apply form filters
+                const educationLevel = document.getElementById('educationLevel').value;
+                const fieldOfStudy = document.getElementById('fieldOfStudy').value;
+                const scholarshipType = document.getElementById('scholarshipType').value;
+                const familyIncome = document.getElementById('familyIncome').value;
+                
+                // In a real implementation, these would filter based on actual scholarship data
+                // For now, we'll just return the filtered list
+                
+                return filtered;
+            }
+            
+            // Function to render scholarships
+            function renderScholarships() {
+                const filteredScholarships = getFilteredScholarships();
+                const scholarshipsToDisplay = filteredScholarships.slice(0, displayedCount);
+                
+                scholarshipContainer.innerHTML = '';
+                
+                if (scholarshipsToDisplay.length === 0) {
+                    scholarshipContainer.innerHTML = `
+                        <div class="no-results">
+                            <i class="fas fa-search fa-3x mb-4"></i>
+                            <h3 class="text-xl font-semibold mb-2">No scholarships found</h3>
+                            <p>Try adjusting your search criteria or filters to find more scholarships.</p>
+                        </div>
+                    `;
+                    loadMoreButton.style.display = 'none';
+                    return;
+                }
+                
+                scholarshipsToDisplay.forEach(scholarship => {
+                    const scholarshipCard = createScholarshipCard(scholarship);
+                    scholarshipContainer.appendChild(scholarshipCard);
+                    
+                    // Add fade-in animation
+                    setTimeout(() => {
+                        scholarshipCard.classList.add('visible');
+                    }, 100);
+                });
+                
+                // Show/hide load more button
+                if (displayedCount >= filteredScholarships.length) {
+                    loadMoreButton.style.display = 'none';
+                } else {
+                    loadMoreButton.style.display = 'block';
+                }
+            }
+            
+            // Function to create a scholarship card
+            function createScholarshipCard(scholarship) {
+                const card = document.createElement('div');
+                card.className = 'scholarship-card fade-in';
+                card.setAttribute('data-categories', scholarship.categories.join(' '));
+                
+                // Create badge HTML
+                const badgesHTML = scholarship.categories.map(category => 
+                    `<span class="scholarship-badge ${category}">${getCategoryDisplayName(category)}</span>`
+                ).join('');
+                
+                card.innerHTML = `
+                    <div class="flex flex-col md:flex-row md:justify-between md:items-start">
+                        <div class="md:w-2/3">
+                            <h3 class="text-xl font-semibold mb-2 text-primary">${scholarship.title}</h3>
+                            <div class="mb-3">
+                                ${badgesHTML}
+                            </div>
+                            <p class="mb-4">${scholarship.description}</p>
+                            
+                            <div class="scholarship-detail-row">
+                                <div class="scholarship-detail-label">Eligibility:</div>
+                                <div class="scholarship-detail-value">${scholarship.eligibility}</div>
+                            </div>
+                            <div class="scholarship-detail-row">
+                                <div class="scholarship-detail-label">Benefits:</div>
+                                <div class="scholarship-detail-value">${scholarship.benefits}</div>
+                            </div>
+                            <div class="scholarship-detail-row">
+                                <div class="scholarship-detail-label">Application Period:</div>
+                                <div class="scholarship-detail-value">${scholarship.applicationPeriod}</div>
+                            </div>
+                        </div>
+                        <div class="md:w-1/3 md:text-right mt-4 md:mt-0">
+                            <div class="scholarship-amount">${scholarship.amount}</div>
+                            <div class="scholarship-deadline">Deadline: ${scholarship.deadline}</div>
+                            <button class="apply-now bg-primary text-white px-4 py-2 rounded-lg w-full md:w-auto mt-3 hover:bg-secondary transition" data-id="${scholarship.id}">
+                                Apply Now
+                            </button>
+                            <button class="view-details border border-primary text-primary px-4 py-2 rounded-lg w-full md:w-auto mt-2 hover:bg-primary hover:text-white transition" data-id="${scholarship.id}">
+                                View Details
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                // Add event listeners to buttons
+                card.querySelector('.apply-now').addEventListener('click', function() {
+                    const scholarshipId = this.getAttribute('data-id');
+                    applyForScholarship(scholarshipId);
+                });
+                
+                card.querySelector('.view-details').addEventListener('click', function() {
+                    const scholarshipId = this.getAttribute('data-id');
+                    showScholarshipDetails(scholarshipId);
+                });
+                
+                return card;
+            }
+            
+            // Function to get display name for category
+            function getCategoryDisplayName(category) {
+                const categoryMap = {
+                    'merit': 'Merit-based',
+                    'need': 'Need-based',
+                    'sports': 'Sports',
+                    'minority': 'Minority',
+                    'women': 'Women',
+                    'government': 'Government',
+                    'private': 'Private'
+                };
+                
+                return categoryMap[category] || category;
+            }
+            
+            // Function to handle Apply Now button click
+            function applyForScholarship(scholarshipId) {
+                const scholarship = scholarshipData.find(s => s.id == scholarshipId);
+                if (scholarship && scholarship.website) {
+                    // Redirect to the scholarship website
+                    window.open(scholarship.website, '_blank');
+                } else {
+                    alert('Application details not available for this scholarship.');
+                }
+            }
+            
+            // Function to show scholarship details in modal
+            function showScholarshipDetails(scholarshipId) {
+                const scholarship = scholarshipData.find(s => s.id == scholarshipId);
+                if (!scholarship) return;
+                
+                // Create badges HTML
+                const badgesHTML = scholarship.categories.map(category => 
+                    `<span class="scholarship-badge ${category}">${getCategoryDisplayName(category)}</span>`
+                ).join('');
+                
+                // Populate modal content
+                document.getElementById('detailModalTitle').textContent = scholarship.title;
+                document.getElementById('scholarshipDetailContent').innerHTML = `
+                    <div class="mb-4">
+                        ${badgesHTML}
+                    </div>
+                    <p class="mb-4">${scholarship.description}</p>
+                    
+                    <div class="scholarship-detail-row">
+                        <div class="scholarship-detail-label">Provider:</div>
+                        <div class="scholarship-detail-value">${scholarship.provider}</div>
+                    </div>
+                    <div class="scholarship-detail-row">
+                        <div class="scholarship-detail-label">Eligibility:</div>
+                        <div class="scholarship-detail-value">${scholarship.eligibility}</div>
+                    </div>
+                    <div class="scholarship-detail-row">
+                        <div class="scholarship-detail-label">Benefits:</div>
+                        <div class="scholarship-detail-value">${scholarship.benefits}</div>
+                    </div>
+                    <div class="scholarship-detail-row">
+                        <div class="scholarship-detail-label">Application Period:</div>
+                        <div class="scholarship-detail-value">${scholarship.applicationPeriod}</div>
+                    </div>
+                    <div class="scholarship-detail-row">
+                        <div class="scholarship-detail-label">Scholarship Amount:</div>
+                        <div class="scholarship-detail-value">${scholarship.amount}</div>
+                    </div>
+                    <div class="scholarship-detail-row">
+                        <div class="scholarship-detail-label">Deadline:</div>
+                        <div class="scholarship-detail-value">${scholarship.deadline}</div>
+                    </div>
+                    <div class="scholarship-detail-row">
+                        <div class="scholarship-detail-label">Required Documents:</div>
+                        <div class="scholarship-detail-value">${scholarship.documents}</div>
+                    </div>
+                    
+                    ${scholarship.website ? `
+                        <a href="${scholarship.website}" target="_blank" class="scholarship-website-link">
+                            <i class="fas fa-external-link-alt"></i>
+                            Visit Official Website
+                        </a>
+                    ` : ''}
+                `;
+                
+                // Show the modal
+                document.getElementById('scholarshipDetailModal').classList.add('open');
+            }
+        });
+
+        // Enhanced Professional Chatbot with Counseling Capabilities
+        const chatbotButton = document.getElementById('chatbotButton');
+        const closeChat = document.getElementById('closeChat');
+        const minimizeChat = document.getElementById('minimizeChat');
+        const chatWindow = document.getElementById('chatWindow');
+        const chatInput = document.getElementById('chatInput');
+        const sendMessage = document.getElementById('sendMessage');
+        const chatMessages = document.getElementById('chatMessages');
+        const clearChat = document.getElementById('clearChat');
+        const suggestAssessment = document.getElementById('suggestAssessment');
+        const scheduleSession = document.getElementById('scheduleSession');
+        
+        let isChatMinimized = false;
+        let messageHistory = [];
+        let userContext = {
+            name: '',
+            age: '',
+            currentEducation: '',
+            interests: [],
+            strengths: [],
+            concerns: []
+        };
+        
+        // Load message history from localStorage
+        if (localStorage.getItem('chatHistory')) {
+            messageHistory = JSON.parse(localStorage.getItem('chatHistory'));
+            renderMessageHistory();
+        }
+        
+        // Load user context if exists
+        if (localStorage.getItem('userContext')) {
+            userContext = JSON.parse(localStorage.getItem('userContext'));
+        }
+        
+        // Chatbot toggle functionality
+        chatbotButton.addEventListener('click', () => {
+            if (isChatMinimized) {
+                chatWindow.classList.add('open');
+                isChatMinimized = false;
+            } else {
+                chatWindow.classList.toggle('open');
+            }
+            chatbotButton.classList.remove('has-unread');
+        });
+        
+        // Close chat
+        closeChat.addEventListener('click', () => {
+            chatWindow.classList.remove('open');
+        });
+        
+        // Minimize chat
+        minimizeChat.addEventListener('click', () => {
+            chatWindow.classList.remove('open');
+            isChatMinimized = true;
+        });
+        
+        // Send message functionality
+        sendMessage.addEventListener('click', sendUserMessage);
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendUserMessage();
+            }
+        });
+        
+        // Clear chat history
+        clearChat.addEventListener('click', () => {
+            if (confirm('Are you sure you want to clear our conversation history?')) {
+                messageHistory = [];
+                localStorage.removeItem('chatHistory');
+                chatMessages.innerHTML = '';
+                initializeChat();
+            }
+        });
+        
+        // Suggest assessment
+        suggestAssessment.addEventListener('click', () => {
+            addBotMessage(`I recommend taking our comprehensive career assessment to get personalized insights. Our assessment evaluates your:
+            <div class="assessment-suggestion">
+            <strong>✓ Personality Traits</strong><br>
+            <strong>✓ Interests & Passions</strong><br>
+            <strong>✓ Academic Strengths</strong><br>
+            <strong>✓ Career Values</strong><br>
+            <strong>✓ Learning Style</strong>
+            </div>
+            Would you like to begin the assessment now?`);
+        });
+        
+        // Schedule counseling session
+        scheduleSession.addEventListener('click', () => {
+            addBotMessage(`I'd be happy to schedule a one-on-one counseling session with you. Our certified career counselors can provide:
+            <div class="resource-card">
+            <strong>Personalized Career Roadmap</strong><br>
+            <strong>In-depth Skill Assessment</strong><br>
+            <strong>College Application Strategy</strong><br>
+            <strong>Interview Preparation</strong><br>
+            <strong>Career Transition Guidance</strong>
+            </div>
+            Please share your availability, and I'll connect you with our scheduling team.`);
+        });
+        
+        // Counseling option buttons
+        document.querySelectorAll('.counseling-option').forEach(option => {
+            option.addEventListener('click', () => {
+                const optionType = option.getAttribute('data-option');
+                handleCounselingOption(optionType);
+            });
+        });
+        
+        function initializeChat() {
+            addBotMessage("Namaste! I'm Dr. Ananya Sharma, your personal career counselor at विद्याRoute. I'm here to help you navigate your educational and career journey with personalized guidance.");
+            addBotMessage(`How can I assist you today? I can help with:
+                <div class="counseling-options">
+                    <div class="counseling-option" data-option="stream_selection">
+                        <i class="fas fa-graduation-cap"></i>
+                        <div>Stream Selection</div>
+                    </div>
+                    <div class="counseling-option" data-option="career_planning">
+                        <i class="fas fa-road"></i>
+                        <div>Career Planning</div>
+                    </div>
+                    <div class="counseling-option" data-option="college_guidance">
+                        <i class="fas fa-university"></i>
+                        <div>College Guidance</div>
+                    </div>
+                    <div class="counseling-option" data-option="exam_preparation">
+                        <i class="fas fa-book"></i>
+                        <div>Exam Preparation</div>
+                    </div>
+                    <div class="counseling-option" data-option="skill_development">
+                        <i class="fas fa-tools"></i>
+                        <div>Skill Development</div>
+                    </div>
+                    <div class="counseling-option" data-option="stress_management">
+                        <i class="fas fa-heart"></i>
+                        <div>Stress Management</div>
+                    </div>
+                </div>`);
+        }
+        
+        function sendUserMessage() {
+            const message = chatInput.value.trim();
+            if (message === '') return;
+            
+            addUserMessage(message);
+            chatInput.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Analyze message and generate professional response
+            setTimeout(() => {
+                removeTypingIndicator();
+                const response = generateProfessionalResponse(message);
+                addBotMessage(response);
+                
+                // Save to history
+                saveMessageToHistory(message, response);
+                
+                // Update user context based on conversation
+                updateUserContext(message);
+            }, 1500);
+        }
+        
+        function addUserMessage(text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', 'user');
+            
+            const messageContent = document.createElement('div');
+            messageContent.textContent = text;
+            messageDiv.appendChild(messageContent);
+            
+            const messageTime = document.createElement('div');
+            messageTime.classList.add('message-time');
+            messageTime.textContent = getCurrentTime();
+            messageDiv.appendChild(messageTime);
+            
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+            
+            // Add unread indicator if chat is closed
+            if (!chatWindow.classList.contains('open')) {
+                chatbotButton.classList.add('has-unread');
+            }
+        }
+        
+        function addBotMessage(text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('message', 'bot');
+            
+            const messageContent = document.createElement('div');
+            messageContent.innerHTML = text;
+            messageDiv.appendChild(messageContent);
+            
+            const messageTime = document.createElement('div');
+            messageTime.classList.add('message-time');
+            messageTime.textContent = getCurrentTime();
+            messageDiv.appendChild(messageTime);
+            
+            chatMessages.appendChild(messageDiv);
+            scrollToBottom();
+            
+            // Re-attach event listeners for any new counseling options
+            setTimeout(() => {
+                document.querySelectorAll('.counseling-option').forEach(option => {
+                    option.addEventListener('click', () => {
+                        const optionType = option.getAttribute('data-option');
+                        handleCounselingOption(optionType);
+                    });
+                });
+            }, 100);
+        }
+        
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.classList.add('typing-indicator');
+            typingDiv.id = 'typingIndicator';
+            
+            for (let i = 0; i < 3; i++) {
+                const dot = document.createElement('span');
+                typingDiv.appendChild(dot);
+            }
+            
+            chatMessages.appendChild(typingDiv);
+            scrollToBottom();
+        }
+        
+        function removeTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+        
+        function scrollToBottom() {
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function getCurrentTime() {
+            const now = new Date();
+            return now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+        
+        function saveMessageToHistory(userMessage, botResponse) {
+            messageHistory.push({
+                user: userMessage,
+                bot: botResponse,
+                timestamp: new Date().toISOString()
+            });
+            
+            // Keep only last 50 messages to prevent storage issues
+            if (messageHistory.length > 50) {
+                messageHistory = messageHistory.slice(-50);
+            }
+            
+            localStorage.setItem('chatHistory', JSON.stringify(messageHistory));
+        }
+        
+        function renderMessageHistory() {
+            chatMessages.innerHTML = '';
+            
+            if (messageHistory.length === 0) {
+                initializeChat();
+                return;
+            }
+            
+            messageHistory.forEach(msg => {
+                addUserMessage(msg.user);
+                addBotMessage(msg.bot);
+            });
+        }
+        
+        function handleCounselingOption(optionType) {
+            let response = '';
+            
+            switch(optionType) {
+                case 'stream_selection':
+                    response = `Choosing the right stream after 10th grade is crucial. Let me guide you through this important decision.
+                    <div class="resource-card">
+                    <strong>Science Stream:</strong> Ideal for students interested in engineering, medicine, research, or technology careers. Requires strong analytical skills and interest in mathematics and sciences.<br><br>
+                    <strong>Commerce Stream:</strong> Perfect for those interested in business, finance, accounting, or entrepreneurship. Develops numerical and analytical abilities.<br><br>
+                    <strong>Arts/Humanities:</strong> Excellent for creative thinkers interested in literature, social sciences, law, psychology, or civil services. Focuses on critical thinking and communication skills.
+                    </div>
+                    Could you tell me about your interests and academic strengths?`;
+                    break;
+                    
+                case 'career_planning':
+                    response = `Career planning is a journey of self-discovery and strategic decision-making. Let's explore your options.
+                    <div class="resource-card">
+                    <strong>Step 1:</strong> Self-Assessment - Identify your interests, values, and skills<br>
+                    <strong>Step 2:</strong> Career Exploration - Research various career options<br>
+                    <strong>Step 3:</strong> Decision Making - Match your profile with suitable careers<br>
+                    <strong>Step 4:</strong> Action Plan - Create a roadmap with milestones<br>
+                    <strong>Step 5:</strong> Implementation - Take concrete steps toward your goals
+                    </div>
+                    What are you most passionate about, and what careers have you considered?`;
+                    break;
+                    
+                case 'college_guidance':
+                    response = `Choosing the right college involves multiple factors beyond just rankings.
+                    <div class="resource-card">
+                    <strong>Key Considerations:</strong><br>
+                    • Academic reputation and accreditation<br>
+                    • Faculty expertise and student-faculty ratio<br>
+                    • Infrastructure and facilities<br>
+                    • Placement records and industry connections<br>
+                    • Location and campus culture<br>
+                    • Fee structure and scholarship opportunities<br>
+                    • Extracurricular activities and student life
+                    </div>
+                    What field are you interested in, and what's your preferred location?`;
+                    break;
+                    
+                case 'exam_preparation':
+                    response = `Effective exam preparation requires strategy, consistency, and the right mindset.
+                    <div class="resource-card">
+                    <strong>Preparation Strategy:</strong><br>
+                    • Understand the exam pattern and syllabus thoroughly<br>
+                    • Create a realistic study schedule with regular revisions<br>
+                    • Practice with previous years' question papers<br>
+                    • Focus on conceptual understanding rather than rote learning<br>
+                    • Take regular mock tests to assess preparation<br>
+                    • Maintain physical and mental well-being<br>
+                    • Develop time management skills
+                    </div>
+                    Which exam are you preparing for, and what specific challenges are you facing?`;
+                    break;
+                    
+                case 'skill_development':
+                    response = `In today's competitive world, developing the right skills is essential for career success.
+                    <div class="resource-card">
+                    <strong>Essential 21st Century Skills:</strong><br>
+                    • Critical Thinking and Problem Solving<br>
+                    • Communication and Collaboration<br>
+                    • Digital Literacy and Technological Proficiency<br>
+                    • Creativity and Innovation<br>
+                    • Emotional Intelligence and Adaptability<br>
+                    • Leadership and Team Management<br>
+                    • Continuous Learning Mindset
+                    </div>
+                    What specific skills would you like to develop, and for which career path?`;
+                    break;
+                    
+                case 'stress_management':
+                    response = `Managing academic and career-related stress is crucial for your well-being and success.
+                    <div class="resource-card">
+                    <strong>Stress Management Techniques:</strong><br>
+                    • Practice mindfulness and meditation regularly<br>
+                    • Maintain a balanced routine with adequate sleep<br>
+                    • Engage in physical activity and hobbies<br>
+                    • Break large tasks into manageable steps<br>
+                    • Seek support from family, friends, or counselors<br>
+                    • Practice time management and set realistic goals<br>
+                    • Remember that it's okay to ask for help
+                    </div>
+                    What specific stressors are you currently experiencing in your academic or career journey?`;
+                    break;
+            }
+            
+            addBotMessage(response);
+        }
+        
+        function generateProfessionalResponse(userMessage) {
+            const lowerMessage = userMessage.toLowerCase();
+            
+            // Expanded professional response database with counseling approach
+            const responses = {
+                // Greetings and introductions
+                greetings: [
+                    "It's wonderful to connect with you! I'm here to provide personalized career guidance. To help you better, could you share which grade you're currently in and what subjects interest you the most?",
+                    "Hello! I'm delighted to assist you with your career journey. Understanding your background will help me provide more tailored advice. Could you tell me about your current academic situation and career aspirations?",
+                    "Namaste! Thank you for reaching out. As your career counselor, I'm committed to helping you make informed decisions. What brings you to seek career guidance today?"
+                ],
+                
+                // Thank you and appreciation
+                appreciation: [
+                    "You're most welcome! It's my pleasure to assist you in your career journey. Remember, I'm here whenever you need guidance or have more questions about your educational path.",
+                    "Thank you for your kind words! I'm truly glad I could help. Don't hesitate to reach out if you need further assistance with your career planning or any other concerns.",
+                    "I appreciate your gratitude! Helping students like you navigate their career paths is why I'm here. Feel free to come back anytime you need more guidance or support.",
+                    "You're very welcome! I'm honored to be part of your career exploration journey. Remember that career planning is an ongoing process, and I'm here to support you at every step."
+                ],
+                
+                // Goodbye and farewell
+                farewell: [
+                    "Thank you for the wonderful conversation! I wish you all the best in your career journey. Remember, I'm always here if you need guidance or have more questions. Take care and stay focused on your goals!",
+                    "It was a pleasure assisting you today! I'm confident you'll make great decisions about your future. Don't hesitate to reach out if you need any further guidance. Best of luck with your endeavors!",
+                    "Goodbye for now! Remember that career success comes from continuous learning and adaptation. I'm here whenever you need support or advice. Wishing you tremendous success in all your future endeavors!",
+                    "Thank you for chatting with me today! I'm excited to see where your career journey takes you. Remember to trust your instincts and stay true to your passions. I'll be here whenever you need me!",
+                    "Farewell for now! It was wonderful discussing your career aspirations. Keep exploring, keep learning, and don't forget that every step forward is progress. I'm always available when you need guidance!"
+                ],
+                
+                // Stream selection queries
+                streamSelection: [
+                    `Based on your query about stream selection, I'd like to emphasize that the right choice depends on your interests, strengths, and long-term goals.
+                    <div class="resource-card">
+                    <strong>Important Considerations:</strong><br>
+                    • Your natural aptitude and subject preferences<br>
+                    • Career opportunities in each stream<br>
+                    • Higher education options available<br>
+                    • Market trends and future prospects<br>
+                    • Your personal values and lifestyle preferences
+                    </div>
+                    Could you share which subjects you enjoy and excel in?`,
+                    
+                    `Stream selection is a pivotal decision that shapes your career trajectory. Many students face this dilemma, and it's completely normal to feel uncertain.
+                    <div class="assessment-suggestion">
+                    I recommend reflecting on these questions:<br>
+                    • What activities make you lose track of time?<br>
+                    • Which subjects do you find naturally interesting?<br>
+                    • What kind of work environment do you envision?<br>
+                    • What are your parents' and teachers' observations about your strengths?
+                    </div>
+                    Your answers to these questions will provide valuable insights for making this important decision.`
+                ],
+                
+                // Career confusion and indecision
+                careerConfusion: [
+                    `Career confusion is very common and actually shows that you're thinking deeply about your future. Many successful professionals changed their paths multiple times.
+                    <div class="resource-card">
+                    <strong>Let's approach this systematically:</strong><br>
+                    1. Identify your core interests and values<br>
+                    2. Assess your natural strengths and abilities<br>
+                    3. Research careers that align with both<br>
+                    4. Consider practical aspects like education requirements<br>
+                    5. Explore through internships or projects
+                    </div>
+                    What specific areas are you most confused about?`,
+                    
+                    `It's completely normal to feel uncertain about career choices. Remember that career paths are rarely linear, and many opportunities emerge along the journey.
+                    <div class="assessment-suggestion">
+                    <strong>Action Steps:</strong><br>
+                    • Take our comprehensive career assessment<br>
+                    • Research 3-5 careers that mildly interest you<br>
+                    • Talk to professionals in those fields<br>
+                    • Consider short courses or workshops<br>
+                    • Don't pressure yourself to have all answers immediately
+                    </div>
+                    What specific concerns are causing the most confusion for you?`
+                ],
+                
+                // Engineering and medical guidance
+                engineeringMedical: [
+                    `The engineering and medical fields both offer rewarding careers but require different skill sets and preparation approaches.
+                    <div class="resource-card">
+                    <strong>Engineering:</strong> Requires strong analytical thinking, problem-solving skills, and mathematical aptitude. Preparation focuses on JEE Main/Advanced and state engineering exams.<br><br>
+                    <strong>Medical:</strong> Demands excellent memory, attention to detail, empathy, and scientific curiosity. Preparation centers around NEET-UG and other medical entrance exams.
+                    </div>
+                    Which field aligns better with your natural abilities and interests?`,
+                    
+                    `Both engineering and medicine are prestigious fields with excellent career prospects. The choice should align with your personal strengths and passions.
+                    <div class="assessment-suggestion">
+                    <strong>Self-Reflection Questions:</strong><br>
+                    • Do you enjoy building and creating solutions? (Engineering)<br>
+                    • Are you fascinated by how the human body works? (Medicine)<br>
+                    • Do you prefer working with technology or people?<br>
+                    • What kind of work-life balance are you seeking?
+                    </div>
+                    Your honest answers to these questions will guide you toward the right path.`
+                ],
+                
+                // Study abroad queries
+                studyAbroad: [
+                    `Studying abroad can be a transformative experience that broadens your perspectives and enhances career opportunities.
+                    <div class="resource-card">
+                    <strong>Key Considerations for Studying Abroad:</strong><br>
+                    • Academic reputation of universities<br>
+                    • Cost of education and living expenses<br>
+                    • Scholarship and financial aid options<br>
+                    • Visa requirements and processes<br>
+                    • Cultural adaptation and support systems<br>
+                    • Post-study work opportunities<br>
+                    • Long-term career goals
+                    </div>
+                    Which countries are you considering, and what field do you want to pursue?`,
+                    
+                    `International education offers incredible growth opportunities but requires careful planning and preparation.
+                    <div class="assessment-suggestion">
+                    <strong>Preparation Timeline:</strong><br>
+                    • 12-18 months before: Research and shortlist universities<br>
+                    • 10-12 months before: Prepare for required exams (SAT, GRE, GMAT, IELTS, TOEFL)<br>
+                    • 8-10 months before: Prepare application materials<br>
+                    • 6-8 months before: Submit applications<br>
+                    • 4-6 months before: Apply for visas and arrange funding
+                    </div>
+                    What specific aspect of studying abroad would you like to explore further?`
+                ],
+                
+                // Exam preparation stress
+                examStress: [
+                    `Exam preparation can be challenging, but with the right strategies, you can manage stress effectively and perform your best.
+                    <div class="resource-card">
+                    <strong>Effective Stress Management During Exams:</strong><br>
+                    • Create a structured study plan with breaks<br>
+                    • Practice relaxation techniques like deep breathing<br>
+                    • Maintain physical health through exercise and nutrition<br>
+                    • Get adequate sleep (7-8 hours nightly)<br>
+                    • Avoid comparing your progress with others<br>
+                    • Focus on understanding concepts rather than memorization<br>
+                    • Celebrate small achievements along the way
+                    </div>
+                    What specific aspect of exam preparation is causing you the most stress?`,
+                    
+                    `It's completely normal to feel pressure during exam preparation. Many high-achieving students experience this.
+                    <div class="assessment-suggestion">
+                    <strong>Mindset Shift Strategies:</strong><br>
+                    • View exams as opportunities to showcase your knowledge<br>
+                    • Focus on continuous improvement rather than perfection<br>
+                    • Remember that one exam doesn't define your worth<br>
+                    • Practice positive self-talk and visualization<br>
+                    • Maintain perspective - this is one step in your long journey
+                    </div>
+                    How can I help you develop a more balanced approach to your exam preparation?`
+                ],
+                
+                // Scholarship queries
+                scholarship: [
+                    `Scholarships can significantly reduce the financial burden of education. Let me help you find the right opportunities.
+                    <div class="resource-card">
+                    <strong>Types of Scholarships Available:</strong><br>
+                    • Merit-based: For academic excellence<br>
+                    • Need-based: For students with financial constraints<br>
+                    • Minority scholarships: For specific community groups<br>
+                    • Women-specific: To promote female education<br>
+                    • Sports scholarships: For athletic achievements<br>
+                    • Disability scholarships: For students with disabilities
+                    </div>
+                    What type of scholarship are you looking for, and what's your current education level?`,
+                    
+                    `Finding the right scholarships requires a strategic approach. Many students miss out on opportunities simply because they don't know where to look.
+                    <div class="assessment-suggestion">
+                    <strong>Key Sources for Scholarships:</strong><br>
+                    • Government schemes (central and state)<br>
+                    • University-specific scholarships<br>
+                    • Corporate scholarships<br>
+                    • NGO and trust funds<br>
+                    • International scholarships for study abroad
+                    </div>
+                    Have you explored any specific scholarship programs yet?`
+                ],
+                
+                // Default professional response
+                default: [
+                    `Thank you for sharing that. I appreciate you taking this step toward planning your career future.
+                    <div class="resource-card">
+                    To provide you with the most relevant guidance, I'd like to understand:<br>
+                    • Your current academic level and stream<br>
+                    • Subjects or activities you're most passionate about<br>
+                    • Your key strengths and areas for development<br>
+                    • Any specific career fields you're considering<br>
+                    • Your main concerns or questions about your future path
+                    </div>
+                    The more context you can provide, the better I can assist you in making informed decisions about your education and career.`,
+                    
+                    `I understand you're seeking guidance on this important aspect of your career planning.
+                    <div class="assessment-suggestion">
+                    <strong>Professional Insight:</strong> Career decisions are most effective when they align with your unique combination of interests, values, skills, and personality traits. Many students benefit from a structured approach to career exploration that includes self-assessment, research, and practical experience.
+                    </div>
+                    Could you share more about what specifically you'd like to achieve through our conversation today?`
+                ]
+            };
+            
+            // Determine the category of the user's message
+            let category = 'default';
+            
+            if (/(hello|hi|hey|namaste|good morning|good afternoon)/i.test(lowerMessage)) {
+                category = 'greetings';
+            } else if (/(thank|thanks|appreciate|grateful)/i.test(lowerMessage)) {
+                category = 'appreciation';
+            } else if (/(bye|goodbye|farewell|see you|take care)/i.test(lowerMessage)) {
+                category = 'farewell';
+            } else if (/(stream|science|commerce|arts|humanities|11th|12th|subject)/i.test(lowerMessage)) {
+                category = 'streamSelection';
+            } else if (/(confus|undecided|don't know|what should|career path|future)/i.test(lowerMessage)) {
+                category = 'careerConfusion';
+            } else if (/(engineer|medical|doctor|mbbs|jee|neet|iit|aiims)/i.test(lowerMessage)) {
+                category = 'engineeringMedical';
+            } else if (/(abroad|foreign|international|usa|uk|canada|australia|germany)/i.test(lowerMessage)) {
+                category = 'studyAbroad';
+            } else if (/(stress|pressure|anxiety|nervous|worry|scared|afraid)/i.test(lowerMessage)) {
+                category = 'examStress';
+            } else if (/(scholarship|financial aid|funding|grant|fee|money)/i.test(lowerMessage)) {
+                category = 'scholarship';
+            }
+            
+            // Select random response from the appropriate category
+            const categoryResponses = responses[category];
+            return categoryResponses[Math.floor(Math.random() * categoryResponses.length)];
+        }
+        
+        function updateUserContext(message) {
+            // Extract potential user information from messages
+            const lowerMessage = message.toLowerCase();
+            
+            // Extract age if mentioned
+            const ageMatch = lowerMessage.match(/(\d+)\s*(year|yr|age)/);
+            if (ageMatch && !userContext.age) {
+                userContext.age = ageMatch[1];
+            }
+            
+            // Extract educational level
+            if (/(10th|tenth|matric)/i.test(lowerMessage) && !userContext.currentEducation) {
+                userContext.currentEducation = '10th Grade';
+            } else if (/(11th|eleventh)/i.test(lowerMessage) && !userContext.currentEducation) {
+                userContext.currentEducation = '11th Grade';
+            } else if (/(12th|twelfth)/i.test(lowerMessage) && !userContext.currentEducation) {
+                userContext.currentEducation = '12th Grade';
+            } else if (/(graduate|graduation|college|degree)/i.test(lowerMessage) && !userContext.currentEducation) {
+                userContext.currentEducation = 'Graduation';
+            }
+            
+            // Extract interests
+            const interestKeywords = {
+                science: ['science', 'physics', 'chemistry', 'biology', 'math', 'mathematics'],
+                commerce: ['commerce', 'business', 'account', 'finance', 'econom'],
+                arts: ['arts', 'history', 'political', 'psychology', 'sociology', 'literature'],
+                technology: ['computer', 'programming', 'coding', 'tech', 'software', 'ai'],
+                creative: ['design', 'art', 'music', 'dance', 'writing', 'photography']
+            };
+            
+            for (const [interest, keywords] of Object.entries(interestKeywords)) {
+                if (keywords.some(keyword => lowerMessage.includes(keyword)) && 
+                    !userContext.interests.includes(interest)) {
+                    userContext.interests.push(interest);
+                }
+            }
+            
+            // Save updated context
+            localStorage.setItem('userContext', JSON.stringify(userContext));
+        }
+
+        // Initialize the chat when page loads
+        initializeChat();
+
+        // Theme toggle functionality
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('i');
+        const body = document.body;
+        
+        themeToggle.addEventListener('click', () => {
+            if (body.getAttribute('data-theme') === 'light') {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                body.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        });
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            body.setAttribute('data-theme', savedTheme);
+            if (savedTheme === 'dark') {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+        }
+
+        // Mobile menu functionality
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeMobileMenu = document.getElementById('closeMobileMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.style.display = 'block';
+        });
+        
+        closeMobileMenu.addEventListener('click', () => {
+            mobileMenu.style.display = 'none';
+        });
+
+        // Modal functionality
+        document.getElementById('privacyLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('privacyModal').classList.add('open');
+        });
+        
+        document.getElementById('termsLink').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('termsModal').classList.add('open');
+        });
+        
+        document.querySelectorAll('.close-modal').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.modal').forEach(modal => {
+                    modal.classList.remove('open');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

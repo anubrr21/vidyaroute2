@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Chat API Test</title>
+</head>
+<body>
+    <h1>Chat API Test</h1>
+    <input type="text" id="messageInput" placeholder="Type a message..." style="padding: 10px; width: 300px;">
+    <button onclick="sendMessage()" style="padding: 10px;">Send</button>
+    <div id="result" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc;"></div>
+
+    <script>
+        async function sendMessage() {
+            const message = document.getElementById('messageInput').value;
+            const resultDiv = document.getElementById('result');
+            
+            if (!message) {
+                resultDiv.innerHTML = 'Please enter a message';
+                return;
+            }
+
+            resultDiv.innerHTML = 'Sending...';
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        context: {}
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.innerHTML = `<strong>You:</strong> ${message}<br><strong>Bot:</strong> ${data.response}`;
+                } else {
+                    resultDiv.innerHTML = `Error: ${data.error}`;
+                }
+                
+            } catch (error) {
+                resultDiv.innerHTML = `Connection failed: ${error.message}`;
+            }
+        }
+
+        // Test connection on load
+        async function testConnection() {
+            const resultDiv = document.getElementById('result');
+            try {
+                const response = await fetch('http://localhost:5000/health');
+                if (response.ok) {
+                    resultDiv.innerHTML = '✅ Backend connection successful! Try sending a message.';
+                }
+            } catch (error) {
+                resultDiv.innerHTML = '❌ Backend connection failed. Make sure server is running.';
+            }
+        }
+
+        testConnection();
+    </script>
+</body>
+</html>
